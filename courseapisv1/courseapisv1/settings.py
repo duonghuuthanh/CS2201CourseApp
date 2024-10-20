@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'courses.apps.CoursesConfig'
+    'courses.apps.CoursesConfig',
+    'ckeditor',
+    'ckeditor_uploader'
 ]
 
 AUTH_USER_MODEL = 'courses.User'
+
+CKEDITOR_UPLOAD_PATH = "images/ckeditor/"
 
 import pymysql
 pymysql.install_as_MySQLdb()
