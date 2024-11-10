@@ -1,8 +1,27 @@
 from django.contrib import admin
+from django.db.models import Count
+from django.template.response import TemplateResponse
+
 from courses.models import Category, Course, Lesson
 from django.utils.html import mark_safe
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django.urls import path
+
+
+class MyCourseAdmin(admin.AdminSite):
+    site_header = 'OU eCourse'
+
+    def get_urls(self):
+        return [path('course-stats/', self.stats)] + super().get_urls()
+
+    def stats(self, request):
+        # dem so khoa hoc cua 1 danh muc
+        stats = Category.objects.annotate(count=Count('course__id')).values('id', 'name', 'count')
+
+        return TemplateResponse(request, 'admin/stats.html', {
+            'stats': stats
+        })
 
 
 class LessonForm(forms.ModelForm):
@@ -28,7 +47,8 @@ class LessonAdmin(admin.ModelAdmin):
             'all': ('/static/css/styles.css', )
         }
 
+admin_site = MyCourseAdmin(name='eCourse')
 
-admin.site.register(Category)
-admin.site.register(Course)
-admin.site.register(Lesson, LessonAdmin)
+admin_site.register(Category)
+admin_site.register(Course)
+admin_site.register(Lesson, LessonAdmin)
