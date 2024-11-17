@@ -41,14 +41,22 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
-    'drf_yasg'
+    'drf_yasg',
+    'oauth2_provider'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 AUTH_USER_MODEL = 'courses.User'
 
 CKEDITOR_UPLOAD_PATH = "images/ckeditor/"
 
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 MIDDLEWARE = [
@@ -132,3 +140,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import cloudinary
+
+cloudinary.config(
+    cloud_name="dxxwcby8l",
+    api_key="448651448423589",
+    api_secret="ftGud0r1TTqp0CGp5tjwNmkAm-A",
+    secure=True
+)
+
+CLIENT_ID = 'yiOrk7GfFuUI3sjI1qlPqJWg6oCVJqiz9NqAU8rn'
+CLIENT_SECRET = 'JZCjJhYWyf7IAplmJEF6oeCokGMSX08w3H17U4HCSgnmzgnSun7TkV73irqfMuTgC76QBP0aMHKnJ63y6gPXSLvNK2R7E4uxtRH9twSQJMrrxd63elbU0rtm5o92VPGY'
+
+OAUTH2_PROVIDER = { 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore' }
