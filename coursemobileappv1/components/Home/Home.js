@@ -4,6 +4,7 @@ import Styles from "../../styles/Styles";
 import APIs, { endpoints } from "../../configs/APIs";
 import { Chip, List, Searchbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import Item from "./Item";
 
 const Home = () => {
     const [categories, setCategories] = useState([]);
@@ -86,8 +87,10 @@ const Home = () => {
             </View>
             <Searchbar placeholder="Tìm khóa học..." value={q} onChangeText={t => search(t, setQ)} />
             {loading && <ActivityIndicator />}
-            <FlatList refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />} onEndReached={loadMore} data={courses} renderItem={({item}) => <List.Item key={item.id} title={item.subject} description={item.created_date} 
-            left={props => <TouchableOpacity onPress={() => nav.navigate('lesson')}><Image source={{uri: item.image}} style={Styles.box} /></TouchableOpacity>} />} />
+
+            <FlatList refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />} onEndReached={loadMore} data={courses} 
+                    renderItem={({item}) => <Item item={item} routeName="lesson" params={{'courseId': item.id}} />} />
+
         </View>
     );
 }
