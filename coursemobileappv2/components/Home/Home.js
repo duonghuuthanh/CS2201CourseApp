@@ -83,7 +83,7 @@ const Home = () => {
 
             <Searchbar placeholder="Tìm khóa học..." value={q} onChangeText={t => search(t, setQ)} />
 
-            <FlatList refreshing={loading} onRefresh={<RefreshControl onRefresh={refresh} />} onEndReached={loadMore} data={courses} 
+            <FlatList refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />} onEndReached={loadMore} data={courses} 
                 renderItem={({item}) => <List.Item key={item.id} title={item.subject} description={item.created_date} left={() => <Image source={{uri: item.image}} style={MyStyles.box} />} />} />
             
         </View> 
