@@ -1,8 +1,9 @@
-import { View, Text, ActivityIndicator, Image, ScrollView, TouchableOpacity, FlatList, RefreshControl } from "react-native";
+import { View, ActivityIndicator, TouchableOpacity, FlatList, RefreshControl } from "react-native";
 import MyStyles from "../../styles/MyStyles";
 import React from 'react'
 import APIs, { endpoints } from "../../configs/APIs";
-import { Chip, List, Searchbar } from "react-native-paper";
+import { Chip, Searchbar } from "react-native-paper";
+import Items from "./Items";
 
 const Home = () => {
     const [categories, setCategories] = React.useState([]);
@@ -14,7 +15,6 @@ const Home = () => {
 
     const loadCates = async () => {
         let res = await APIs.get(endpoints['categories']);
-        console.info(res.data);
         setCategories(res.data);
     }
 
@@ -27,8 +27,6 @@ const Home = () => {
 
                 if (cateId || q)
                     url = `${url}&category_id=${cateId}&q=${q}`;
-
-                console.info(url);
 
                 let res = await APIs.get(url);
                 if (page > 1)
@@ -73,8 +71,6 @@ const Home = () => {
 
     return (
         <View style={[MyStyles.container, MyStyles.margin]}>
-            <Text style={MyStyles.subject}>DANH MỤC KHÓA HỌC</Text>
-
             <View style={MyStyles.row}>
                 <TouchableOpacity onPress={() => search("", setCateId)} ><Chip style={MyStyles.margin} icon="label">Tất cả</Chip></TouchableOpacity>
                 {categories.map(c => <TouchableOpacity onPress={() => search(c.id, setCateId)} key={c.id}><Chip style={MyStyles.margin} icon="label" >{c.name}</Chip></TouchableOpacity>)}
@@ -84,8 +80,7 @@ const Home = () => {
             <Searchbar placeholder="Tìm khóa học..." value={q} onChangeText={t => search(t, setQ)} />
 
             <FlatList refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />} onEndReached={loadMore} data={courses} 
-                renderItem={({item}) => <List.Item key={item.id} title={item.subject} description={item.created_date} left={() => <Image source={{uri: item.image}} style={MyStyles.box} />} />} />
-            
+                renderItem={({item}) => <Items key={item.id} item={item} routeName='lessons' params={{'courseId': item.id}} />} />
         </View> 
     );
 }
