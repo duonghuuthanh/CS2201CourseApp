@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import axios from "axios";
 
 const BASE_URL = 'https://thanhduong.pythonanywhere.com/';
@@ -14,8 +14,9 @@ export const endpoints = {
     'register': '/users/'
 }
 
-export const authApis = async () =>  {
-    const token = await AsyncStorage.getItem('token');
+export const authApis =  (token) =>  {
+    console.info("TEST")
+    console.info(token);
     return axios.create({
         baseURL: BASE_URL, 
         headers: {

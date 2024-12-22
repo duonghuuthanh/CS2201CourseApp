@@ -31,9 +31,29 @@ const Login = () => {
         setUser({...user, [field]: value});
     }
 
-    const login = async () => {
-        await AsyncStorage.removeItem('token');
+    // const auth = async () => {
+    //     const res = await APIs.post(endpoints['login'], {
+    //         "client_id": "Vbe8euZZQJoWJ2UzW9wDThg4hJEZHHbhFmnfj7UR",
+    //         "client_secret": "cVm4w4hSdy4MtwbP4KuNgXkGPeQJ9yrQdBvXHGR6b3e97F2bYqQ81XJ49FEufzjcw4SKwpuOZQiCLsNelHY1MkuYTGBRcSqtWmSlebSUk27WfyDskCB2VeCQihnEKdZ2",
+    //         'grant_type': "password",
+    //         ...user
+    //     });
+
+    //     await AsyncStorage.setItem('token', res.data.access_token);
+
+    //     console.info(res.data);
+    // }
+
+    // const getUser = async () => {
+    //     const token = await AsyncStorage.getItem('token');
+    //     console.info(token);
+    //     user = await  authApis(token).get(endpoints['current-user']);
+
+    //     await AsyncStorage.setItem('user', user.data);
         
+    // }
+
+    const login = async () => {
         try {
             setLoading(true);
 
@@ -44,11 +64,22 @@ const Login = () => {
                 'grant_type': "password",
                 ...user
             });
-    
-            console.info(res.data);
+            
+            console.info( res.data.access_token)
             await AsyncStorage.setItem('token', res.data.access_token);
 
-            dispatch({"type": "login"});
+            setTimeout(async () => {
+                const token = await AsyncStorage.getItem("token");
+                console.info(token);
+                user = await authApis(token).get(endpoints['current-user']);
+
+                console.info(user.data);
+            
+                dispatch({"type": "login", "payload": {"username": "thanh"}});
+
+            }, 500);
+           
+            
         } catch (ex) {
             console.error(ex);
         } finally {

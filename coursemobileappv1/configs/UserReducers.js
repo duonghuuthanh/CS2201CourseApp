@@ -1,15 +1,12 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { authApis, endpoints } from "./APIs";
-
-const MyUserReducer = async (currentState, action) => {
+const MyUserReducer = (currentState, action) => {
     switch (action.type) {
-        case "login":
-            const user = await (await authApis()).get(endpoints['current-user']);
-            console.info(user.data);
-            return user.data;
-        case "logout":
-            await AsyncStorage.removeItem('token');
+        case "login": {
+            
+            return action.payload;
+        }
+        case "logout": {
             return null;
+        }
     }
 
     return currentState;
